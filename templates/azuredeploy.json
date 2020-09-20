@@ -140,12 +140,12 @@
                         "value": {
                             "azureloganalyticsdatacollector": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]",
-                                "connectionName": "azureloganalyticsdatacollector",
+                                "connectionName": "[variables('logAnalyticsConnectionName')]",
                                 "id": "/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/azureloganalyticsdatacollector"
                             },
                             "salesforce": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', variables('salesforceConnectionName'))]",
-                                "connectionName": "salesforce",
+                                "connectionName": "[variables('salesforceConnectionName')]",
                                 "id": "/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/salesforce"
                             }
                         }
