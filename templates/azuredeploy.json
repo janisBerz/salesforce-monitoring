@@ -1,0 +1,52 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "environment": {
+            "type": "string",
+            "defaultValue": "dev",
+            "metadata": {
+                "description": "Deployment environment"
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "appName": {
+            "type": "string",
+            "defaultValue": "[uniqueString(resourceGroup().id)]"
+        }
+    },
+    "variables": {
+        "logAnalyticsName": "[toLower(concat(parameters('environment'),'-la-',parameters('appName')))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2020-08-01",
+            "name": "[variables('logAnalyticsName')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "displayName": "Log Analytics",
+                "ProjectName": "[parameters('appName')]"
+            },
+            "properties": {
+                "sku": {
+                    "name": "pergb2018"
+                },
+                "retentionInDays": 30,
+                "workspaceCapping": {
+                    "dailyQuotaGb": -1
+                },
+                "features": {
+                    "searchVersion": 1,
+                    "legacy": 0
+                }
+            }
+        }
+    ]
+}

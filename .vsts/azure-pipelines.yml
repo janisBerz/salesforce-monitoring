@@ -1,23 +1,44 @@
-name: $(Date:yyyyMMdd)$(Rev:.r)
+name: $(appName)$(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
-  var1: value1
-  vmImage: ubuntu-latest
-
-
+  appName: 'salesforce-monitoring'
+  vmImage: 'ubuntu-latest'
+  azureSubscription: 'visma-private-msdn'
+  armStorage: 'corearmtemplates'
 
 
 jobs:
-- job: Build
+- job: 'Build'
   steps:
-  - script: echo First step!
+  - script: 'echo First step!'
+  - task: AzureFileCopy@4
+    inputs:
+      sourcePath: 'templates'
+      azureSubscription: $(azureSubscription)
+      destination: azureBlob
+      sotorage: $(armStorage)
+      containerName: $(Build.BuildNumber)
+
+
 
 - deployment: 'Deploy to Test'        # instead of job keyword, use deployment keyword
   pool:
     vmImage: '$(vmImage)'
-  environment: test
+  environment: 'test'
   strategy:
     runOnce:
       deploy:
         steps:
-        - script: echo Hi!
+        - script: 'echo Hi!'
+
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Provision Web App Dev'
+          inputs:
+            azureSubscription: '$(azureSubscription)'
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: $(Release.EnvironmentName)-$(appName)
+            location: 'UK West'
+            csmFile: 'templates/azuredeploy.json'
+            csmParametersFile: 'templates/azuredeploy.parameters.json'
+            overrideParameters: -environment $(Release.EnvironmentName)
+            deploymentMode: Incremental
