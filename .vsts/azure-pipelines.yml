@@ -2,7 +2,7 @@ name: $(appName)$(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
   appName: 'salesforce-monitoring'
-  vmImage: 'ubuntu-latest'
+  vmImage: 'windows-latest'
   azureSubscription: 'visma-private-msdn'
   armStorage: 'corearmtemplates'
 
