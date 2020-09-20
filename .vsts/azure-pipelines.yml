@@ -9,6 +9,8 @@ variables:
 
 jobs:
 - job: 'Build'
+  pool:
+    vmImage: '$(vmImage)'
   steps:
   - script: 'echo First step!'
   - task: AzureFileCopy@4
@@ -16,12 +18,10 @@ jobs:
       sourcePath: 'templates'
       azureSubscription: $(azureSubscription)
       destination: azureBlob
-      sotorage: $(armStorage)
+      storage: $(armStorage)
       containerName: $(Build.BuildNumber)
 
-
-
-- deployment: 'Deploy_Test'        # instead of job keyword, use deployment keyword
+- deployment: 'Deploy_Test'
   pool:
     vmImage: '$(vmImage)'
   environment: 'test'
@@ -36,8 +36,8 @@ jobs:
           inputs:
             azureSubscription: '$(azureSubscription)'
             action: 'Create Or Update Resource Group'
-            resourceGroupName: $(Release.EnvironmentName)-$(appName)
-            location: 'UK West'
+            resourceGroupName: $(Environment.Name)-$(appName)
+            location: 'West Europe'
             csmFile: 'templates/azuredeploy.json'
             csmParametersFile: 'templates/azuredeploy.parameters.json'
             overrideParameters: -environment $(Release.EnvironmentName)
