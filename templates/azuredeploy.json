@@ -55,7 +55,7 @@
             "type": "Microsoft.Logic/workflows",
             "apiVersion": "2017-07-01",
             "name": "[variables('workflowName')]",
-            "location": "westeurope",
+            "location": "[parameters('location')]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/connections', variables('salesforceConnectionName'))]",
                 "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]"
@@ -141,12 +141,12 @@
                             "azureloganalyticsdatacollector": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]",
                                 "connectionName": "[variables('logAnalyticsConnectionName')]",
-                                "id": "/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/azureloganalyticsdatacollector"
+                                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/azureloganalyticsdatacollector')]"
                             },
                             "salesforce": {
                                 "connectionId": "[resourceId('Microsoft.Web/connections', variables('salesforceConnectionName'))]",
                                 "connectionName": "[variables('salesforceConnectionName')]",
-                                "id": "/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/salesforce"
+                                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/salesforce')]"
                             }
                         }
                     }
@@ -162,7 +162,7 @@
                 "displayName": "salesforce-workspace-connection",
                 "customParameterValues": {},
                 "api": {
-                    "id": "[concat('/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/', variables('logAnalyticsConnectionName'))]"
+                    "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/azureloganalyticsdatacollector')]"
                 }
             }
         },
@@ -175,7 +175,7 @@
                 "displayName": "janis.berzins@visma.com",
                 "customParameterValues": {},
                 "api": {
-                    "id": "[concat('/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/', variables('salesforceConnectionName'))]"
+                    "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/salesforce')]"
                 }
             }
         }
