@@ -53,5 +53,5 @@ stages:
               location: 'West Europe'
               csmFile: $(Pipeline.Workspace)/templates/azuredeploy.json
               csmParametersFile: $(Pipeline.Workspace)/templates/azuredeploy.parameters.json
-              overrideParameters: -environment $(Environment.Name)
+              overrideParameters: -environment $(Environment.Name) appName $(appName)
               deploymentMode: Incremental
