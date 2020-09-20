@@ -14,7 +14,7 @@ stages:
     pool:
       vmImage: '$(vmImage)'
     steps:
-    - script: 'echo First step!'
+
     - task: AzureFileCopy@3
       inputs:
         sourcePath: 'templates'
@@ -36,7 +36,6 @@ stages:
       runOnce:
         deploy:
           steps:
-          - script: 'echo Hi!'
 
           - task: AzureResourceGroupDeployment@2
             displayName: 'Provision Web App Dev'
