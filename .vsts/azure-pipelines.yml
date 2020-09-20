@@ -2,6 +2,7 @@ name: $(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
   var1: value1
+  vmImage: ubuntu-latest
 
 
 
@@ -13,7 +14,7 @@ jobs:
 
 - deployment: Test        # instead of job keyword, use deployment keyword
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: '$(vmImage)'
   environment: test
   strategy:
     runOnce:
