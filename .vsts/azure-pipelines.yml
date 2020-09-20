@@ -14,13 +14,16 @@ stages:
       vmImage: '$(vmImage)'
     steps:
     - script: 'echo First step!'
-    - task: AzureFileCopy@4
+    - task: AzureFileCopy@3
       inputs:
         sourcePath: 'templates'
         azureSubscription: $(azureSubscription)
         destination: azureBlob
         storage: $(armStorage)
-        containerName: armtemplates
+        ContainerName: 'staging'
+        outputStorageUri: 'artifactsLocation'
+        outputStorageContainerSasToken: 'artifactsLocationSasToken'
+        sasTokenTimeOutInMinutes: '240'
 
 - stage: 'Deployment'
   jobs:
