@@ -22,7 +22,10 @@
         }
     },
     "variables": {
-        "logAnalyticsName": "[toLower(concat(parameters('environment'),'-la-',parameters('appName')))]"
+        "logAnalyticsName": "[toLower(concat(parameters('environment'),'-la-',parameters('appName')))]",
+        "workflowName": "[toLower(concat(parameters('environment'),'-wf-',parameters('appName')))]",
+        "logAnalyticsConnectionName": "[toLower(concat(parameters('environment'),'-la-connection-',parameters('appName')))]",
+        "salesforceConnectionName": "[toLower(concat(parameters('environment'),'-sf-connection-',parameters('appName')))]"
     },
     "resources": [
         {
@@ -45,6 +48,134 @@
                 "features": {
                     "searchVersion": 1,
                     "legacy": 0
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "[variables('workflowName')]",
+            "location": "westeurope",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', variables('salesforceConnectionName'))]",
+                "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]"
+            ],
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "frequency": "Day",
+                                "interval": 1
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "Get_records": {
+                            "runAfter": {},
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['salesforce']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('UserLicense'))}/items"
+                            }
+                        },
+                        "Initialize_variable": {
+                            "runAfter": {
+                                "Get_records": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable",
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "salesforceResults",
+                                        "type": "array",
+                                        "value": "@body('Get_records')?['value']"
+                                    }
+                                ]
+                            }
+                        },
+                        "Send_Data": {
+                            "runAfter": {
+                                "Initialize_variable": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "body": "@{variables('salesforceResults')}",
+                                "headers": {
+                                    "Log-Type": "salesforceLicense"
+                                },
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                    }
+                                },
+                                "method": "post",
+                                "path": "/api/logs"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureloganalyticsdatacollector": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]",
+                                "connectionName": "azureloganalyticsdatacollector",
+                                "id": "/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/azureloganalyticsdatacollector"
+                            },
+                            "salesforce": {
+                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('salesforceConnectionName'))]",
+                                "connectionName": "salesforce",
+                                "id": "/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/salesforce"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "[variables('logAnalyticsConnectionName')]",
+            "location": "westeurope",
+            "properties": {
+                "displayName": "salesforce-workspace-connection",
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/', variables('logAnalyticsConnectionName'))]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Web/connections",
+            "apiVersion": "2016-06-01",
+            "name": "[variables('salesforceConnectionName')]",
+            "location": "westeurope",
+            "properties": {
+                "displayName": "janis.berzins@visma.com",
+                "customParameterValues": {},
+                "api": {
+                    "id": "[concat('/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/providers/Microsoft.Web/locations/westeurope/managedApis/', variables('salesforceConnectionName'))]"
                 }
             }
         }

@@ -20,17 +20,6 @@ stages:
         targetPath: '$(System.DefaultWorkingDirectory)/templates'
         artifactName: templates
 
-    # - task: AzureFileCopy@3
-    #   inputs:
-    #     sourcePath: 'templates'
-    #     azureSubscription: $(azureSubscription)
-    #     destination: azureBlob
-    #     storage: $(armStorage)
-    #     ContainerName: 'staging'
-    #     outputStorageUri: 'artifactsLocation'
-    #     outputStorageContainerSasToken: 'artifactsLocationSasToken'
-    #     sasTokenTimeOutInMinutes: '240'
-
 - stage: 'Deployment'
   jobs:
   - deployment: 'Deploy_Test'
