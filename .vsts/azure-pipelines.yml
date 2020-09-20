@@ -2,7 +2,7 @@ name: $(appName)$(Date:yyyyMMdd)$(Rev:.r)
 
 variables:
   appName: 'salesforce-monitoring'
-  vmImage: 'windows-latest'
+  vmImage: 'ubuntu-latest'
   azureSubscription: 'visma-private-msdn'
   armStorage: 'corearmtemplates'
   resourceGroupName: $(Environment.Name)-$(appName)
@@ -51,7 +51,7 @@ stages:
               action: 'Create Or Update Resource Group'
               resourceGroupName: $(resourceGroupName)
               location: 'West Europe'
-              csmFile: $(Pipeline.Workspace)/templates/deployment.json
-              csmParametersFile: $(Pipeline.Workspace)/templates/deployment.parameters.json
+              csmFile: $(Pipeline.Workspace)/templates/azuredeploy.json
+              csmParametersFile: $(Pipeline.Workspace)/templates/azuredeploy.parameters.json
               overrideParameters: -environment $(Release.EnvironmentName)
               deploymentMode: Incremental
