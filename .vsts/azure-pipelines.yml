@@ -6,39 +6,42 @@ variables:
   azureSubscription: 'visma-private-msdn'
   armStorage: 'corearmtemplates'
 
+stages:
+- stage: 'Build'
+  jobs:
+  - job: 'Build'
+    pool:
+      vmImage: '$(vmImage)'
+    steps:
+    - script: 'echo First step!'
+    - task: AzureFileCopy@4
+      inputs:
+        sourcePath: 'templates'
+        azureSubscription: $(azureSubscription)
+        destination: azureBlob
+        storage: $(armStorage)
+        containerName: $(Build.BuildNumber)
 
-jobs:
-- job: 'Build'
-  pool:
-    vmImage: '$(vmImage)'
-  steps:
-  - script: 'echo First step!'
-  - task: AzureFileCopy@4
-    inputs:
-      sourcePath: 'templates'
-      azureSubscription: $(azureSubscription)
-      destination: azureBlob
-      storage: $(armStorage)
-      containerName: $(Build.BuildNumber)
+- stage: 'Deployment'
+  jobs:
+  - deployment: 'Deploy_Test'
+    pool:
+      vmImage: '$(vmImage)'
+    environment: 'test'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: 'echo Hi!'
 
-- deployment: 'Deploy_Test'
-  pool:
-    vmImage: '$(vmImage)'
-  environment: 'test'
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - script: 'echo Hi!'
-
-        - task: AzureResourceGroupDeployment@2
-          displayName: 'Provision Web App Dev'
-          inputs:
-            azureSubscription: '$(azureSubscription)'
-            action: 'Create Or Update Resource Group'
-            resourceGroupName: $(Environment.Name)-$(appName)
-            location: 'West Europe'
-            csmFile: 'templates/azuredeploy.json'
-            csmParametersFile: 'templates/azuredeploy.parameters.json'
-            overrideParameters: -environment $(Release.EnvironmentName)
-            deploymentMode: Incremental
+          - task: AzureResourceGroupDeployment@2
+            displayName: 'Provision Web App Dev'
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              action: 'Create Or Update Resource Group'
+              resourceGroupName: $(Environment.Name)-$(appName)
+              location: 'West Europe'
+              csmFile: 'templates/azuredeploy.json'
+              csmParametersFile: 'templates/azuredeploy.parameters.json'
+              overrideParameters: -environment $(Release.EnvironmentName)
+              deploymentMode: Incremental
