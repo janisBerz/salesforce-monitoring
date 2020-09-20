@@ -12,7 +12,7 @@ jobs:
   steps:
   - script: echo First step!
 
-- deployment: Test        # instead of job keyword, use deployment keyword
+- deployment: 'Deploy to Test'        # instead of job keyword, use deployment keyword
   pool:
     vmImage: '$(vmImage)'
   environment: test
