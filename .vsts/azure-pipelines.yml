@@ -21,7 +21,7 @@ jobs:
 
 
 
-- deployment: 'Deploy to Test'        # instead of job keyword, use deployment keyword
+- deployment: 'Deploy_Test'        # instead of job keyword, use deployment keyword
   pool:
     vmImage: '$(vmImage)'
   environment: 'test'
