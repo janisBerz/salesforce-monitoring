@@ -20,7 +20,7 @@ stages:
         azureSubscription: $(azureSubscription)
         destination: azureBlob
         storage: $(armStorage)
-        containerName: $(Build.BuildNumber)
+        containerName: armtemplates
 
 - stage: 'Deployment'
   jobs:
