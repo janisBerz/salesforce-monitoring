@@ -5,6 +5,7 @@ variables:
   vmImage: 'windows-latest'
   azureSubscription: 'visma-private-msdn'
   armStorage: 'corearmtemplates'
+  resourceGroupName: $(Environment.Name)-$(appName)
 
 stages:
 - stage: 'Build'
@@ -42,9 +43,10 @@ stages:
             inputs:
               azureSubscription: '$(azureSubscription)'
               action: 'Create Or Update Resource Group'
-              resourceGroupName: $(Environment.Name)-$(appName)
+              resourceGroupName: $(resourceGroupName)
               location: 'West Europe'
-              csmFile: 'templates/azuredeploy.json'
-              csmParametersFile: 'templates/azuredeploy.parameters.json'
+              templateLocation: 'URL of the file'
+              csmFileLink: $(artifactsLocation)staging/deployment.json$(artifactsLocationSasToken)
+              csmParametersFileLink: $(artifactsLocation)staging/deployment.parameters.json$(artifactsLocationSasToken)
               overrideParameters: -environment $(Release.EnvironmentName)
               deploymentMode: Incremental
