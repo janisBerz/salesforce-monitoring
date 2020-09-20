@@ -42,6 +42,8 @@ stages:
         deploy:
           steps:
 
+          - task: DownloadPipelineArtifact@2
+
           - task: AzureResourceGroupDeployment@2
             displayName: 'Provision Web App Dev'
             inputs:
@@ -49,8 +51,7 @@ stages:
               action: 'Create Or Update Resource Group'
               resourceGroupName: $(resourceGroupName)
               location: 'West Europe'
-              templateLocation: 'URL of the file'
-              csmFileLink: $(artifactsLocation)staging/deployment.json$(artifactsLocationSasToken)
-              csmParametersFileLink: $(artifactsLocation)staging/deployment.parameters.json$(artifactsLocationSasToken)
+              csmFile: $(Pipeline.Workspace)/templates/deployment.json
+              csmParametersFile: $(Pipeline.Workspace)/templates/deployment.parameters.json
               overrideParameters: -environment $(Release.EnvironmentName)
               deploymentMode: Incremental
