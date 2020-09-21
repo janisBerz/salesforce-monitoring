@@ -34,7 +34,7 @@ stages:
           - task: DownloadPipelineArtifact@2
 
           - task: AzureResourceGroupDeployment@2
-            displayName: 'Provision Web App Dev'
+            displayName: 'Provisioning infrastructure'
             inputs:
               azureSubscription: '$(azureSubscription)'
               action: 'Create Or Update Resource Group'
