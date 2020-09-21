@@ -20,16 +20,6 @@ stages:
         targetPath: '$(System.DefaultWorkingDirectory)/templates'
         artifactName: templates
 
-    - task: AzureFileCopy@4
-      displayName: 'Copy ARM templates to Blob Storage'
-      inputs:
-        SourcePath: '$(System.DefaultWorkingDirectory)/templates'
-        azureSubscription: '$(azureSubscription)'
-        Destination: 'AzureBlob'
-        storage: wesintegrationdeployment
-        ContainerName: builds
-        BlobPrefix: '$(Build.BuildNumber)/templates'
-
 - stage: 'Deployment'
   jobs:
   - deployment: 'Deploy_Test'
@@ -50,7 +40,6 @@ stages:
               action: 'Create Or Update Resource Group'
               resourceGroupName: $(resourceGroupName)
               location: 'West Europe'
-              templateLocation: 'URL of the file'
               csmFile: $(Pipeline.Workspace)/templates/azuredeploy.json
               csmParametersFile: $(Pipeline.Workspace)/templates/azuredeploy.parameters.json
               overrideParameters: -environment $(Environment.Name) -appName $(appName)
