@@ -163,6 +163,10 @@
                 "customParameterValues": {},
                 "api": {
                     "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/azureloganalyticsdatacollector')]"
+                },
+                "parameterValues": {
+                    "username": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName')), providers('Microsoft.OperationalInsights', 'workspaces').apiVersions[0]).customerId]",
+                    "password": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName')), providers('Microsoft.OperationalInsights', 'workspaces').apiVersions[0]).primarySharedKey]"
                 }
             }
         },
@@ -176,10 +180,6 @@
                 "customParameterValues": {},
                 "api": {
                     "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/salesforce')]"
-                },
-                "parameterValues": {
-                    "username": "[reference(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName')), providers('Microsoft.OperationalInsights', 'workspaces').apiVersions[0]).customerId]",
-                    "password": "[listKeys(resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName')), providers('Microsoft.OperationalInsights', 'workspaces').apiVersions[0]).primarySharedKey]"
                 }
             }
         }
