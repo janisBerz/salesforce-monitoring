@@ -269,8 +269,8 @@
                                             "name": "ComponentId",
                                             "value": {
                                                 "SubscriptionId": "[subscription().id]",
-                                                "ResourceGroup": "salesforce-monitor",
-                                                "Name": "salesforce-workspace",
+                                                "ResourceGroup": "[resourceGroup().name]",
+                                                "Name": "[variables('logAnalyticsConnectionName')]",
                                                 "ResourceId": "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]"
                                             },
                                             "isOptional": true
