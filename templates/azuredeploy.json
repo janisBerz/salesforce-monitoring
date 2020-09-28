@@ -74,16 +74,80 @@
                     "triggers": {
                         "Recurrence": {
                             "recurrence": {
-                                "frequency": "Day",
+                                "frequency": "Hour",
                                 "interval": 1
                             },
                             "type": "Recurrence"
                         }
                     },
                     "actions": {
-                        "Get_records": {
+                        "For_Each_User_Licenses": {
+                            "actions": {
+                                "Compose_License_Information": {
+                                    "inputs": {
+                                        "CompanyId": " @{variables('companyId')}",
+                                        "CompanyName": "@{variables('companyName')}",
+                                        "CreatedDate": "@{items('For_Each_User_Licenses')['ItemInternalId']}",
+                                        "Id": "@{items('For_Each_User_Licenses')['Id']}",
+                                        "ItemInternalId": "@{items('For_Each_User_Licenses')['ItemInternalId']}",
+                                        "LastModifiedDate": "@{items('For_Each_User_Licenses')['LastModifiedDate']}",
+                                        "LicenseDefinitionKey": "@{items('For_Each_User_Licenses')['LicenseDefinitionKey']}",
+                                        "MasterLabel": "@{items('For_Each_User_Licenses')['MasterLabel']}",
+                                        "Name": "@{items('For_Each_User_Licenses')['Name']}",
+                                        "Status": "@{items('For_Each_User_Licenses')['Status']}",
+                                        "SystemModstamp": "@{items('For_Each_User_Licenses')['SystemModstamp']}",
+                                        "TimeGenerated": "@{items('For_Each_User_Licenses')['UsedLicensesLastUpdated']}",
+                                        "TotalLicenses": "@{items('For_Each_User_Licenses')['TotalLicenses']}",
+                                        "UsedLicenses": "@{items('For_Each_User_Licenses')['UsedLicenses']}",
+                                        "UsedLicensesLastUpdated": "@{items('For_Each_User_Licenses')['UsedLicensesLastUpdated']}"
+                                    },
+                                    "runAfter": {},
+                                    "type": "Compose"
+                                },
+                                "Send_Data": {
+                                    "inputs": {
+                                        "body": "@{outputs('Compose_License_Information')}",
+                                        "headers": {
+                                            "Log-Type": "SalesforceLicense"
+                                        },
+                                        "host": {
+                                            "connection": {
+                                                "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/api/logs"
+                                    },
+                                    "runAfter": {
+                                        "Compose_License_Information": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection"
+                                }
+                            },
+                            "foreach": "@body('Get_Records')?['value']",
+                            "runAfter": {
+                                "Get_Records": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "Foreach"
+                        },
+                        "Get_Organiztions": {
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "name": "@parameters('$connections')['salesforce']['connectionId']"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('Organization'))}/items"
+                            },
                             "runAfter": {},
-                            "type": "ApiConnection",
+                            "type": "ApiConnection"
+                        },
+                        "Get_Records": {
                             "inputs": {
                                 "host": {
                                     "connection": {
@@ -92,45 +156,47 @@
                                 },
                                 "method": "get",
                                 "path": "/datasets/default/tables/@{encodeURIComponent(encodeURIComponent('UserLicense'))}/items"
-                            }
-                        },
-                        "Initialize_variable": {
+                            },
                             "runAfter": {
-                                "Get_records": [
+                                "Initialize_Company_ID": [
                                     "Succeeded"
                                 ]
                             },
-                            "type": "InitializeVariable",
+                            "type": "ApiConnection"
+                        },
+                        "Initialize_Company_ID": {
                             "inputs": {
                                 "variables": [
                                     {
-                                        "name": "salesforceResults",
-                                        "type": "array",
-                                        "value": "@body('Get_records')?['value']"
+                                        "name": "companyId",
+                                        "type": "string",
+                                        "value": "@{body('Get_Organiztions')['value'][0]['Id']}"
                                     }
                                 ]
-                            }
-                        },
-                        "Send_Data": {
+                            },
                             "runAfter": {
-                                "Initialize_variable": [
+                                "Initialize_Company_Name": [
                                     "Succeeded"
                                 ]
                             },
-                            "type": "ApiConnection",
+                            "type": "InitializeVariable"
+                        },
+                        "Initialize_Company_Name": {
                             "inputs": {
-                                "body": "@{variables('salesforceResults')}",
-                                "headers": {
-                                    "Log-Type": "salesforceLicense"
-                                },
-                                "host": {
-                                    "connection": {
-                                        "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                "variables": [
+                                    {
+                                        "name": "companyName",
+                                        "type": "string",
+                                        "value": "@{body('Get_Organiztions')['value'][0]['Name']}"
                                     }
-                                },
-                                "method": "post",
-                                "path": "/api/logs"
-                            }
+                                ]
+                            },
+                            "runAfter": {
+                                "Get_Organiztions": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable"
                         }
                     },
                     "outputs": {}
