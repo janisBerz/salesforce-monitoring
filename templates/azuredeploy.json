@@ -25,7 +25,8 @@
         "logAnalyticsName": "[toLower(concat(parameters('environment'),'-la-',parameters('appName')))]",
         "workflowName": "[toLower(concat(parameters('environment'),'-wf-',parameters('appName')))]",
         "logAnalyticsConnectionName": "[toLower(concat(parameters('environment'),'-la-connection-',parameters('appName')))]",
-        "salesforceConnectionName": "[toLower(concat(parameters('environment'),'-sf-connection-',parameters('appName')))]"
+        "salesforceConnectionName": "[toLower(concat(parameters('environment'),'-sf-connection-',parameters('appName')))]",
+        "dashboardName": "[toLower(concat(parameters('environment'),'-db-',parameters('appName')))]"
     },
     "resources": [
         {
@@ -312,16 +313,6 @@
                                             "isOptional": true
                                         },
                                         {
-                                            "name": "PartId",
-                                            "value": "13eeeac9-3c75-4c1a-a51c-ef1a290422ed",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Version",
-                                            "value": "1.0",
-                                            "isOptional": true
-                                        },
-                                        {
                                             "name": "resourceTypeMode",
                                             "value": "workspace",
                                             "isOptional": true
@@ -451,11 +442,11 @@
                 "metadata": {
                 }
             },
-            "name": "Salesforce Monitoring",
+            "name": "[variables('dashboardName')]",
             "type": "Microsoft.Portal/dashboards",
             "location": "[parameters('location')]",
             "tags": {
-                "hidden-title": "Salesforce Monitoring"
+                "hidden-title": "[variables('dashboardName')]"
             },
             "apiVersion": "2015-08-01-preview"
         }
