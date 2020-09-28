@@ -271,7 +271,7 @@
                                                 "SubscriptionId": "[subscription().id]",
                                                 "ResourceGroup": "[resourceGroup().name]",
                                                 "Name": "[variables('logAnalyticsConnectionName')]",
-                                                "ResourceId": "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]"
+                                                "ResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
                                             },
                                             "isOptional": true
                                         },
