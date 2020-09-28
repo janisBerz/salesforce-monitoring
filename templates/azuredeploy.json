@@ -312,12 +312,6 @@
                                             "value": "test-la-salesforce-monitoring",
                                             "isOptional": true
                                         },
-
-                                        {
-                                            "name": "Version",
-                                            "value": "1.0",
-                                            "isOptional": true
-                                        },
                                         {
                                             "name": "resourceTypeMode",
                                             "value": "workspace",
