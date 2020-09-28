@@ -270,30 +270,8 @@
                                             "value": {
                                                 "SubscriptionId": "[subscription().subscriptionId]",
                                                 "ResourceGroup": "[resourceGroup().name]",
-                                                "Name": "[variables('logAnalyticsConnectionName')]",
+                                                "Name": "[variables('logAnalyticsName')]",
                                                 "ResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
-                                            },
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Dimensions",
-                                            "value": {
-                                                "xAxis": {
-                                                    "name": "TimeGenerated",
-                                                    "type": "datetime"
-                                                },
-                                                "yAxis": [
-                                                    {
-                                                        "name": "UsedLicenses_s",
-                                                        "type": "int"
-                                                    },
-                                                    {
-                                                        "name": "TotalLicenses_s",
-                                                        "type": "int"
-                                                    }
-                                                ],
-                                                "splitBy": [],
-                                                "aggregation": "Sum"
                                             },
                                             "isOptional": true
                                         },
