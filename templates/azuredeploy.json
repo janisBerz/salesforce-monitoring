@@ -312,11 +312,7 @@
                                             "value": "test-la-salesforce-monitoring",
                                             "isOptional": true
                                         },
-                                        {
-                                            "name": "PartId",
-                                            "value": "83478398-12a8-4e5e-ab15-3940e7109148",
-                                            "isOptional": true
-                                        },
+
                                         {
                                             "name": "Version",
                                             "value": "1.0",
