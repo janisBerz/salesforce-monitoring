@@ -268,7 +268,7 @@
                                         {
                                             "name": "ComponentId",
                                             "value": {
-                                                "SubscriptionId": "[subscription().id]",
+                                                "SubscriptionId": "[subscription().subscriptionId]",
                                                 "ResourceGroup": "[resourceGroup().name]",
                                                 "Name": "[variables('logAnalyticsConnectionName')]",
                                                 "ResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
