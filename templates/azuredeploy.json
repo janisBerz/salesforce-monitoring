@@ -275,83 +275,83 @@
                                             },
                                             "isOptional": true
                                         },
-                {
-                  "name": "Dimensions",
-                  "value": {
-                    "xAxis": {
-                      "name": "TimeGenerated",
-                      "type": "datetime"
-                    },
-                    "yAxis": [
-                      {
-                        "name": "UsedLicenses_s",
-                        "type": "int"
-                      },
-                      {
-                        "name": "TotalLicenses_s",
-                        "type": "int"
-                      }
-                    ],
-                    "splitBy": [],
-                    "aggregation": "Sum"
-                  },
-                  "isOptional": true
-                },
-                {
-                  "name": "Query",
-                  "value": "SalesforceLicense_CL\r\n| where CompanyName_s == \"visma-sandbox-jb\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"visma-sandbox-jb\")\n",
-                  "isOptional": true
-                },
-                {
-                  "name": "PartTitle",
-                  "value": "visma-sandbox-jb",
-                  "isOptional": true
-                },
-                {
-                  "name": "PartSubTitle",
-                  "value": "test-la-salesforce-monitoring",
-                  "isOptional": true
-                },
-                {
-                  "name": "PartId",
-                  "value": "83478398-12a8-4e5e-ab15-3940e7109148",
-                  "isOptional": true
-                },
-                {
-                  "name": "Version",
-                  "value": "1.0",
-                  "isOptional": true
-                },
-                {
-                  "name": "resourceTypeMode",
-                  "value": "workspace",
-                  "isOptional": true
-                },
-                {
-                  "name": "TimeRange",
-                  "value": "P1D",
-                  "isOptional": true
-                },
-                {
-                  "name": "DashboardId",
-                  "isOptional": true
-                },
-                {
-                  "name": "ControlType",
-                  "value": "FrameControlChart",
-                  "isOptional": true
-                },
-                {
-                  "name": "SpecificChart",
-                  "value": "Line",
-                  "isOptional": true
-                }
+                                        {
+                                            "name": "Dimensions",
+                                            "value": {
+                                                "xAxis": {
+                                                    "name": "TimeGenerated",
+                                                    "type": "datetime"
+                                                },
+                                                "yAxis": [
+                                                    {
+                                                        "name": "UsedLicenses_s",
+                                                        "type": "int"
+                                                    },
+                                                    {
+                                                        "name": "TotalLicenses_s",
+                                                        "type": "int"
+                                                    }
+                                                ],
+                                                "splitBy": [],
+                                                "aggregation": "Sum"
+                                            },
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "Query",
+                                            "value": "SalesforceLicense_CL\r\n| where CompanyName_s == \"visma-sandbox-jb\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"visma-sandbox-jb\")\n",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "PartTitle",
+                                            "value": "visma-sandbox-jb",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "PartSubTitle",
+                                            "value": "test-la-salesforce-monitoring",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "PartId",
+                                            "value": "83478398-12a8-4e5e-ab15-3940e7109148",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "Version",
+                                            "value": "1.0",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "resourceTypeMode",
+                                            "value": "workspace",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "TimeRange",
+                                            "value": "P1D",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "DashboardId",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "ControlType",
+                                            "value": "FrameControlChart",
+                                            "isOptional": true
+                                        },
+                                        {
+                                            "name": "SpecificChart",
+                                            "value": "Line",
+                                            "isOptional": true
+                                        }
                                     ],
                                     "type": "Extension/AppInsightsExtension/PartType/AnalyticsPart",
                                     "settings": {}
                                 }
-                            }
-                            ,"1": {
+                            },
+                            "1": {
                                 "position": {
                                     "x": 6,
                                     "y": 0,
