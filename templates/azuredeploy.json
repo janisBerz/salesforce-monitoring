@@ -318,15 +318,6 @@
                                             "isOptional": true
                                         },
                                         {
-                                            "name": "TimeRange",
-                                            "value": "P1D",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "DashboardId",
-                                            "isOptional": true
-                                        },
-                                        {
                                             "name": "ControlType",
                                             "value": "FrameControlChart",
                                             "isOptional": true
