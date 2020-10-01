@@ -19,6 +19,12 @@
         "appName": {
             "type": "string",
             "defaultValue": "[uniqueString(resourceGroup().id)]"
+        },
+        "salesforceInstances": {
+            "type": "array",
+            "metadata": {
+                "description": "List of Saleforce instances. Must be the value of Organization Name in SF."
+            }
         }
     },
     "variables": {
@@ -26,7 +32,92 @@
         "workflowName": "[toLower(concat(parameters('environment'),'-wf-',parameters('appName')))]",
         "logAnalyticsConnectionName": "[toLower(concat(parameters('environment'),'-la-connection-',parameters('appName')))]",
         "salesforceConnectionName": "[toLower(concat(parameters('environment'),'-sf-connection-',parameters('appName')))]",
-        "dashboardName": "[toLower(concat(parameters('environment'),'-db-',parameters('appName')))]"
+        "dashboardName": "[toLower(concat(parameters('environment'),'-db-',parameters('appName')))]",
+        "copy": [
+            {
+                "name": "salesforceInstances",
+                "count": "[length(parameters('salesforceInstances'))]",
+                "input": {
+                        "[string(copyIndex('salesforceInstances'))]": {
+                            "position": {
+                                "x": 0,
+                                "y": 0,
+                                "colSpan": 6,
+                                "rowSpan": 4
+                            },
+                            "metadata": {
+                                "inputs": [
+                                    {
+                                        "name": "ComponentId",
+                                        "value": {
+                                            "SubscriptionId": "[subscription().subscriptionId]",
+                                            "ResourceGroup": "[resourceGroup().name]",
+                                            "Name": "[variables('logAnalyticsName')]",
+                                            "ResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
+                                        },
+                                        "isOptional": true
+                                    },
+                                    {
+                                        "name": "Dimensions",
+                                        "value": {
+                                            "xAxis": {
+                                                "name": "TimeGenerated",
+                                                "type": "datetime"
+                                            },
+                                            "yAxis": [
+                                                {
+                                                    "name": "UsedLicenses_s",
+                                                    "type": "int"
+                                                },
+                                                {
+                                                    "name": "TotalLicenses_s",
+                                                    "type": "int"
+                                                }
+                                            ],
+                                            "splitBy": [],
+                                            "aggregation": "Sum"
+                                        },
+                                        "isOptional": true
+                                    },
+                                    {
+                                        "name": "Query",
+                                        "value": "[concat('\r\n| where CompanyName_s == \"', parameters('salesforceInstances')[copyIndex('salesforceInstances')],'\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"Visma license usage\") \r\n')]",
+                                        "isOptional": true
+                                    },
+                                    {
+                                        "name": "PartTitle",
+                                        "value": "[parameters('salesforceInstances')[copyIndex('salesforceInstances')]]",
+                                        "isOptional": true
+                                    },
+                                    {
+                                        "name": "PartSubTitle",
+                                        "value": "test-la-salesforce-monitoring",
+                                        "isOptional": true
+                                    },
+                                    {
+                                        "name": "resourceTypeMode",
+                                        "value": "workspace",
+                                        "isOptional": true
+                                    },
+                                    {
+                                        "name": "ControlType",
+                                        "value": "FrameControlChart",
+                                        "isOptional": true
+                                    },
+                                    {
+                                        "name": "SpecificChart",
+                                        "value": "Line",
+                                        "isOptional": true
+                                    }
+                                ],
+                                "type": "Extension/AppInsightsExtension/PartType/AnalyticsPart",
+                                "settings": {}
+                            }
+
+                    }
+                }
+            }
+        ]
     },
     "resources": [
         {
@@ -255,182 +346,8 @@
                 "lenses": {
                     "0": {
                         "order": 0,
-                        "parts": {
-                            "0": {
-                                "position": {
-                                    "x": 0,
-                                    "y": 0,
-                                    "colSpan": 6,
-                                    "rowSpan": 4
-                                },
-                                "metadata": {
-                                    "inputs": [
-                                        {
-                                            "name": "ComponentId",
-                                            "value": {
-                                                "SubscriptionId": "[subscription().subscriptionId]",
-                                                "ResourceGroup": "[resourceGroup().name]",
-                                                "Name": "[variables('logAnalyticsName')]",
-                                                "ResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
-                                            },
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Dimensions",
-                                            "value": {
-                                                "xAxis": {
-                                                    "name": "TimeGenerated",
-                                                    "type": "datetime"
-                                                },
-                                                "yAxis": [
-                                                    {
-                                                        "name": "UsedLicenses_s",
-                                                        "type": "int"
-                                                    },
-                                                    {
-                                                        "name": "TotalLicenses_s",
-                                                        "type": "int"
-                                                    }
-                                                ],
-                                                "splitBy": [],
-                                                "aggregation": "Sum"
-                                            },
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Query",
-                                            "value": "SalesforceLicense_CL\r\n| where CompanyName_s == \"visma-sandbox-jb\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"visma-sandbox-jb\")\n",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "PartTitle",
-                                            "value": "visma-sandbox-jb",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "PartSubTitle",
-                                            "value": "test-la-salesforce-monitoring",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "resourceTypeMode",
-                                            "value": "workspace",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "ControlType",
-                                            "value": "FrameControlChart",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "SpecificChart",
-                                            "value": "Line",
-                                            "isOptional": true
-                                        }
-                                    ],
-                                    "type": "Extension/AppInsightsExtension/PartType/AnalyticsPart",
-                                    "settings": {}
-                                }
-                            },
-                            "1": {
-                                "position": {
-                                    "x": 6,
-                                    "y": 0,
-                                    "colSpan": 6,
-                                    "rowSpan": 4
-                                },
-                                "metadata": {
-                                    "inputs": [
-                                        {
-                                            "name": "ComponentId",
-                                            "value": {
-                                                "SubscriptionId": "d6f970d8-9656-4a72-b6b8-fdf8d91e05bf",
-                                                "ResourceGroup": "salesforce-monitor",
-                                                "Name": "salesforce-workspace",
-                                                "ResourceId": "/subscriptions/d6f970d8-9656-4a72-b6b8-fdf8d91e05bf/resourcegroups/salesforce-monitor/providers/microsoft.operationalinsights/workspaces/salesforce-workspace"
-                                            },
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Dimensions",
-                                            "value": {
-                                                "xAxis": {
-                                                    "name": "TimeGenerated",
-                                                    "type": "datetime"
-                                                },
-                                                "yAxis": [
-                                                    {
-                                                        "name": "UsedLicenses_s",
-                                                        "type": "int"
-                                                    },
-                                                    {
-                                                        "name": "TotalLicenses_s",
-                                                        "type": "int"
-                                                    }
-                                                ],
-                                                "splitBy": [],
-                                                "aggregation": "Sum"
-                                            },
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Query",
-                                            "value": "SalesforceLicense_CL\r\n| where CompanyName_s == \"Visma\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"Visma license usage\") \r\n",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "PartTitle",
-                                            "value": "Visma license usage",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "PartSubTitle",
-                                            "value": "salesforce-workspace",
-                                            "isOptional": true
-                                        },
-                                        // {
-                                        //     "name": "PartId",
-                                        //     "value": "1021b07c-2019-4076-b410-3fa83fd1134f",
-                                        //     "isOptional": true
-                                        // },
-                                        {
-                                            "name": "Version",
-                                            "value": "1.0",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "resourceTypeMode",
-                                            "value": "workspace",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "TimeRange",
-                                            "value": "P1D",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "DashboardId",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "ControlType",
-                                            "value": "FrameControlChart",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "SpecificChart",
-                                            "value": "Line",
-                                            "isOptional": true
-                                        }
-                                    ],
-                                    "type": "Extension/AppInsightsExtension/PartType/AnalyticsPart",
-                                    "settings": {}
-                                }
-                            }
-                        }
+                        "parts": "[variables('salesforceInstances')]"
                     }
-                },
-                "metadata": {
                 }
             },
             "name": "[variables('dashboardName')]",
@@ -441,5 +358,11 @@
             },
             "apiVersion": "2015-08-01-preview"
         }
-    ]
+    ],
+    "outputs": {
+        "copyIndex": {
+            "type": "object",
+            "value": "[variables('salesforceInstances')]"
+        }
+    }
 }
