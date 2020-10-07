@@ -11,10 +11,13 @@
         },
         "appName": {
             "type": "string",
-            "defaultValue": "[uniqueString(resourceGroup().id)]"
+            "defaultValue": "salesforce-monitor"
         },
         "salesforceInstances": {
             "type": "array",
+            "defaultValue": [
+                "yourInstanceName"
+            ],
             "metadata": {
                 "description": "List of Saleforce instances. Must be the value of Organization Name in SF."
             }
