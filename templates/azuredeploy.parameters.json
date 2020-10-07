@@ -7,6 +7,12 @@
       },
       "appName": {
           "value": "salesforce-monitoring"
+      },
+      "salesforceInstances": {
+          "value": [
+              "visma-sandbox-jb",
+              "Visma"
+          ]
       }
     }
   }
