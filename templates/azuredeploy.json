@@ -354,9 +354,5 @@
         }
     ],
     "outputs": {
-        "copyIndex": {
-            "type": "object",
-            "value": "[variables('salesforceInstances')]"
-        }
     }
 }
