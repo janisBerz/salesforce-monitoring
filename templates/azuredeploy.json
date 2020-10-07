@@ -221,8 +221,8 @@
                                 "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/azureloganalyticsdatacollector')]"
                             },
                             "salesforce": {
-                                "connectionId": "[resourceId('Microsoft.Web/connections', variables('salesforceConnectionName'))]",
-                                "connectionName": "[variables('salesforceConnectionName')]",
+                                "connectionId": "[resourceId('Microsoft.Web/connections', concat(variables('salesforceConnectionName'),'-',parameters('salesforceInstances')[copyIndex()]))]",
+                                "connectionName": "[concat(variables('salesforceConnectionName'),'-',parameters('salesforceInstances')[copyIndex()])]",
                                 "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/salesforce')]"
                             }
                         }
@@ -250,10 +250,10 @@
         {
             "type": "Microsoft.Web/connections",
             "apiVersion": "2016-06-01",
-            "name": "[variables('salesforceConnectionName')]",
+            "name": "[concat(variables('salesforceConnectionName'),'-',parameters('salesforceInstances')[copyIndex()])]",
             "location": "westeurope",
             "properties": {
-                "displayName": "[variables('salesforceConnectionName')]",
+                "displayName": "[concat(variables('salesforceConnectionName'),'-',parameters('salesforceInstances')[copyIndex()])]",
                 "customParameterValues": {},
                 "api": {
                     "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('location'), '/managedApis/salesforce')]"
