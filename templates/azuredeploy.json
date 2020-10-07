@@ -67,6 +67,10 @@
                 "[resourceId('Microsoft.Web/connections', variables('salesforceConnectionName'))]",
                 "[resourceId('Microsoft.Web/connections', variables('logAnalyticsConnectionName'))]"
             ],
+            "copy": {
+                "name": "salesforceInstances",
+                "count": "[length(parameters('salesforceInstances'))]"
+            },
             "properties": {
                 "state": "Enabled",
                 "definition": {
