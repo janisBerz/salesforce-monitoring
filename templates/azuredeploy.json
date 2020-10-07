@@ -309,7 +309,7 @@
                                         },
                                         {
                                             "name": "Query",
-                                            "value": "[concat('\r\n| where CompanyName_s == \"', parameters('salesforceInstances')[0],'\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"Visma license usage\") \r\n')]",
+                                            "value": "[concat('SalesforceLicense_CL\r\n| where CompanyName_s == \"', parameters('salesforceInstances')[0],'\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"Visma license usage\") \r\n')]",
                                             "isOptional": true
                                         },
                                         {
