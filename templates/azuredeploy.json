@@ -81,8 +81,8 @@
                     "triggers": {
                         "Recurrence": {
                             "recurrence": {
-                                "frequency": "Hour",
-                                "interval": 1
+                                "frequency": "Minute",
+                                "interval": 30
                             },
                             "type": "Recurrence"
                         }
