@@ -11,7 +11,11 @@
       "salesforceInstances": {
           "value": [
               "visma-sandbox-jb",
-              "Visma"
+              "Visma SP",
+              "Visma CS",
+              "Visma Enterprise Oy",
+              "Visma EN",
+              "Visma TS"
           ]
       }
     }
