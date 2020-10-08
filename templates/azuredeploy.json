@@ -81,8 +81,8 @@
                     "triggers": {
                         "Recurrence": {
                             "recurrence": {
-                                "frequency": "Hour",
-                                "interval": 1
+                                "frequency": "Minute",
+                                "interval": 15
                             },
                             "type": "Recurrence"
                         }
@@ -259,103 +259,104 @@
                     "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/salesforce')]"
                 }
             }
-        },
-        {
-            "properties": {
-                "lenses": {
-                    "0": {
-                        "order": 0,
-                        "parts": {
-                            "0": {
-                                "position": {
-                                    "x": 0,
-                                    "y": 0,
-                                    "colSpan": 6,
-                                    "rowSpan": 4
-                                },
-                                "metadata": {
-                                    "inputs": [
-                                        {
-                                            "name": "ComponentId",
-                                            "value": {
-                                                "SubscriptionId": "[subscription().subscriptionId]",
-                                                "ResourceGroup": "[resourceGroup().name]",
-                                                "Name": "[variables('logAnalyticsName')]",
-                                                "ResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
-                                            },
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Dimensions",
-                                            "value": {
-                                                "xAxis": {
-                                                    "name": "TimeGenerated",
-                                                    "type": "datetime"
-                                                },
-                                                "yAxis": [
-                                                    {
-                                                        "name": "UsedLicenses_s",
-                                                        "type": "int"
-                                                    },
-                                                    {
-                                                        "name": "TotalLicenses_s",
-                                                        "type": "int"
-                                                    }
-                                                ],
-                                                "splitBy": [],
-                                                "aggregation": "Sum"
-                                            },
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "Query",
-                                            "value": "[concat('SalesforceLicense_CL\r\n| where CompanyName_s == \"', parameters('salesforceInstances')[0],'\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"Visma license usage\") \r\n')]",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "PartTitle",
-                                            "value": "[parameters('salesforceInstances')[0]]",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "PartSubTitle",
-                                            "value": "test-la-salesforce-monitoring",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "resourceTypeMode",
-                                            "value": "workspace",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "ControlType",
-                                            "value": "FrameControlChart",
-                                            "isOptional": true
-                                        },
-                                        {
-                                            "name": "SpecificChart",
-                                            "value": "Line",
-                                            "isOptional": true
-                                        }
-                                    ],
-                                    "type": "Extension/AppInsightsExtension/PartType/AnalyticsPart",
-                                    "settings": {}
-
-
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "name": "[variables('dashboardName')]",
-            "type": "Microsoft.Portal/dashboards",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "hidden-title": "[variables('dashboardName')]"
-            },
-            "apiVersion": "2015-08-01-preview"
         }
+        // ,
+        // {
+        //     "properties": {
+        //         "lenses": {
+        //             "0": {
+        //                 "order": 0,
+        //                 "parts": {
+        //                     "0": {
+        //                         "position": {
+        //                             "x": 0,
+        //                             "y": 0,
+        //                             "colSpan": 6,
+        //                             "rowSpan": 4
+        //                         },
+        //                         "metadata": {
+        //                             "inputs": [
+        //                                 {
+        //                                     "name": "ComponentId",
+        //                                     "value": {
+        //                                         "SubscriptionId": "[subscription().subscriptionId]",
+        //                                         "ResourceGroup": "[resourceGroup().name]",
+        //                                         "Name": "[variables('logAnalyticsName')]",
+        //                                         "ResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
+        //                                     },
+        //                                     "isOptional": true
+        //                                 },
+        //                                 {
+        //                                     "name": "Dimensions",
+        //                                     "value": {
+        //                                         "xAxis": {
+        //                                             "name": "TimeGenerated",
+        //                                             "type": "datetime"
+        //                                         },
+        //                                         "yAxis": [
+        //                                             {
+        //                                                 "name": "UsedLicenses_s",
+        //                                                 "type": "int"
+        //                                             },
+        //                                             {
+        //                                                 "name": "TotalLicenses_s",
+        //                                                 "type": "int"
+        //                                             }
+        //                                         ],
+        //                                         "splitBy": [],
+        //                                         "aggregation": "Sum"
+        //                                     },
+        //                                     "isOptional": true
+        //                                 },
+        //                                 {
+        //                                     "name": "Query",
+        //                                     "value": "[concat('SalesforceLicense_CL\r\n| where CompanyName_s == \"', parameters('salesforceInstances')[0],'\"\r\n| where Name_s == \"Salesforce\"\r\n| project TimeGenerated, toint(UsedLicenses_s), toint(TotalLicenses_s)\r\n| render timechart with ( ytitle=\"Licences\", title=\"Visma license usage\") \r\n')]",
+        //                                     "isOptional": true
+        //                                 },
+        //                                 {
+        //                                     "name": "PartTitle",
+        //                                     "value": "[parameters('salesforceInstances')[0]]",
+        //                                     "isOptional": true
+        //                                 },
+        //                                 {
+        //                                     "name": "PartSubTitle",
+        //                                     "value": "test-la-salesforce-monitoring",
+        //                                     "isOptional": true
+        //                                 },
+        //                                 {
+        //                                     "name": "resourceTypeMode",
+        //                                     "value": "workspace",
+        //                                     "isOptional": true
+        //                                 },
+        //                                 {
+        //                                     "name": "ControlType",
+        //                                     "value": "FrameControlChart",
+        //                                     "isOptional": true
+        //                                 },
+        //                                 {
+        //                                     "name": "SpecificChart",
+        //                                     "value": "Line",
+        //                                     "isOptional": true
+        //                                 }
+        //                             ],
+        //                             "type": "Extension/AppInsightsExtension/PartType/AnalyticsPart",
+        //                             "settings": {}
+
+
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     "name": "[variables('dashboardName')]",
+        //     "type": "Microsoft.Portal/dashboards",
+        //     "location": "[resourceGroup().location]",
+        //     "tags": {
+        //         "hidden-title": "[variables('dashboardName')]"
+        //     },
+        //     "apiVersion": "2015-08-01-preview"
+        // }
     ],
     "outputs": {
     }
